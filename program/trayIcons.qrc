@@ -1,0 +1,24 @@
+<RCC>
+    <qresource prefix="/">
+        <file>trayIcons/Capsaqua.ico</file>
+        <file>trayIcons/capsfocicendra.ico</file>
+        <file>trayIcons/Capsrojiblau.ico</file>
+        <file>trayIcons/Footprint-Blue.ico</file>
+        <file>trayIcons/Footprint-Green.ico</file>
+        <file>trayIcons/Footprint-Grey.ico</file>
+        <file>trayIcons/Footprint-Orange.ico</file>
+        <file>trayIcons/Footprint-Pink.ico</file>
+        <file>trayIcons/Footprint-Red.ico</file>
+        <file>trayIcons/MsrejOn.ico</file>
+        <file>trayIcons/NumOn.ico</file>
+        <file>trayIcons/ScriptOff.ico</file>
+        <file>trayIcons/ScriptOff1.ico</file>
+        <file>trayIcons/ScriptOff2.ico</file>
+        <file>trayIcons/ScriptOff3.ico</file>
+        <file>trayIcons/ScriptOn.ico</file>
+        <file>trayIcons/ScriptOn1.ico</file>
+        <file>trayIcons/ScriptOn2.ico</file>
+        <file>trayIcons/ScriptOn3.ico</file>
+        <file>trayIcons/ScriptOn4.ico</file>
+    </qresource>
+</RCC>

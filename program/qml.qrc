@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>authorization.qml</file>
+        <file>contactList.qml</file>
+        <file>dialogue.qml</file>
+        <file>images/Capsaqua.ico</file>
+        <file>images/online.png</file>
+    </qresource>
+</RCC>
