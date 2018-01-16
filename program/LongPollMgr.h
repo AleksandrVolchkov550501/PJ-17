@@ -9,12 +9,14 @@
 #include <QUrl>
 #include <QUrlQuery>
 #include "UserProfile.h"
+#include "DataBase.h"
 
 class LongPollMgr : public QObject
 {
     Q_OBJECT
     QNetworkAccessManager * pQNAM;
     UserProfile * pUserProf;
+    DataBase * dataBase;
     QString key;
     QString server;
     unsigned ts;
@@ -23,7 +25,10 @@ class LongPollMgr : public QObject
     bool isReady;
 
 public:
-    explicit LongPollMgr(UserProfile * pUserProf, QNetworkAccessManager * pQNAM, QObject *parent = nullptr);
+    explicit LongPollMgr(UserProfile *              pUserProf,
+                         QNetworkAccessManager *    pQNAM,
+                         DataBase *                 dataBase,
+                         QObject *                  parent = nullptr);
 
 
     QNetworkAccessManager *getPQNAM() const;

@@ -4,18 +4,21 @@
 #include "VkApi.h"
 #include <QAbstractListModel>
 #include <QStringList>
+#include <QList>
 #include "Person.h"
 #include "LongPollMgr.h"
 #include "UserProfile.h"
+#include "DataBase.h"
 
 class ContactListModel: public QAbstractListModel
 {
     Q_OBJECT
-    QList<int>              m_data;
+    QList<int>              listIDs;
     QMap<int, Person *>     contactList;
     QNetworkAccessManager * pQNAM;
     LongPollMgr *           pLPM;
     UserProfile *           pUserProf;
+    DataBase *              dataBase;
     QNetworkReply *         pReply;
 
 
@@ -32,21 +35,24 @@ public:
         Status
     };
 
-    ContactListModel(UserProfile *pUserProf, LongPollMgr * pLPM, QObject *parent = nullptr);
+    ContactListModel(UserProfile *  pUserProf,
+                     LongPollMgr *  pLPM,
+                     DataBase *     dataBase,
+                     QObject *parent = nullptr);
 
     virtual int rowCount(const QModelIndex &parent) const;
     virtual QVariant data(const QModelIndex &index, int role) const;
 
 public slots:
+    void updateListContactsFromDB();
     void add(Person *person);
     Person * getPerson(int id);
     void setFriendOnOff(QVariantList varList);
-    void vkFriendsGet();
-    void vkHandleFriendsGet();
     int getUserIdByCurIndex(int index);
     void downloadPhoto(QUrl url);
     void savePhoto();
-
+signals:
+    void newPerson(Person *);
 };
 
 

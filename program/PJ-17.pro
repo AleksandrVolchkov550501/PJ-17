@@ -1,6 +1,6 @@
 TEMPLATE = app
 
-QT += qml quick webengine widgets quickwidgets core
+QT += core sql qml quick webengine widgets quickwidgets
 CONFIG += c++11
 
 SOURCES += main.cpp \ #\
@@ -10,7 +10,8 @@ SOURCES += main.cpp \ #\
     ContactListModel.cpp \
     Message.cpp \
     DialogueModel.cpp \
-    ContactList.cpp
+    ContactList.cpp \
+    DataBase.cpp
 
 RESOURCES += qml.qrc
 
@@ -44,5 +45,6 @@ HEADERS += \
     ContactListModel.h \
     Message.h \
     DialogueModel.h \
-    ContactList.h
+    ContactList.h \
+    DataBase.h
 

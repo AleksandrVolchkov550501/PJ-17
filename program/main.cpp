@@ -6,6 +6,7 @@
 #include "UserProfile.h"
 #include "LongPollMgr.h"
 #include "ContactList.h"
+#include "DataBase.h"
 
 int main(int argc, char *argv[])
 {
@@ -17,9 +18,13 @@ int main(int argc, char *argv[])
     QApplication::setQuitOnLastWindowClosed(false);
 
     UserProfile * pUserProf = new UserProfile();
-    LongPollMgr * pLPM = new LongPollMgr(pUserProf, PJ::pQNAM);
 
-    ContactList contactList(pUserProf, pLPM);
+    DataBase * dataBase = new DataBase(pUserProf);
+    dataBase->connectToDataBase();
+
+    LongPollMgr * pLPM = new LongPollMgr(pUserProf, PJ::pQNAM, dataBase);
+
+    ContactList contactList(pUserProf, pLPM, dataBase);
 
     // QQmlApplicationEngine engine;
     // engine.load(QUrl(QStringLiteral("qrc:/main.qml")));

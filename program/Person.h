@@ -83,8 +83,6 @@ public slots:
     int getId() const;
     void setId(int value);
 
-    void vkReqPersonData();     // NOTE: может быть не нужно
-
 };
 
 #endif // PERSON_H

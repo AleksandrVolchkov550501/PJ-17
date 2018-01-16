@@ -5,10 +5,11 @@
 #include <QQuickItem>
 
 // ----------------------------------------------------------------------
-ContactList::ContactList(UserProfile * pUserProf, LongPollMgr *pLPM, QWidget* parent /*=0*/)
+ContactList::ContactList(UserProfile * pUserProf, LongPollMgr *pLPM, DataBase *dataBase, QWidget* parent /*=0*/)
     : QWidget(parent)
     , pLPM(pLPM)
     , pUserProf(pUserProf)
+    , dataBase(dataBase)
 {
     if(pLPM->getIsReady() == false)
         connect(pLPM, SIGNAL(longPollMgrReady()), this, SLOT(startContactList()));
@@ -37,7 +38,7 @@ void ContactList::startContactList()
     setLayout(pvbx);
 
     QQmlContext* pcon = pv->rootContext();
-    clmodel = new ContactListModel(pLPM->getPUserProf(), pLPM, this);
+    clmodel = new ContactListModel(pLPM->getPUserProf(), pLPM, dataBase, this);
 
     pcon->setContextProperty("clmodel", clmodel);
     pcon->setContextProperty("parentWidget", this);
@@ -76,7 +77,6 @@ ContactList::~ContactList()
     qst.setValue("CLGeometry", geometry());
 }
 
-// ----------------------------------------------------------------------
 /*virtual*/void ContactList::closeEvent(QCloseEvent*)
 {
     if (m_ptrayIcon->isVisible()) {
@@ -84,7 +84,6 @@ ContactList::~ContactList()
     }
 }
 
-// ----------------------------------------------------------------------
 void ContactList::slotShowHide(QSystemTrayIcon::ActivationReason reason)
 {
     if(reason == QSystemTrayIcon::Trigger)

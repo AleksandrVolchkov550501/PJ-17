@@ -110,16 +110,6 @@ void Person::setPosInCL(int value)
     posInCL = value;
 }
 
-void Person::vkReqPersonData()
-{
-// FIXME
-//    QUrl url(VK::ApiUrl + "users.get");
-//    QUrlQuery query;
-//    query.addQueryItem("v", VK::ApiVersion);
-//    query.addQueryItem("user_ids", id);
-//    query.addQueryItem("fields", VK::UserGetFields);
-}
-
 int Person::getId() const
 {
     return id;

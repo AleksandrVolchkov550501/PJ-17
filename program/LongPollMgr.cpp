@@ -30,9 +30,10 @@ void LongPollMgr::setIsReady(bool value)
     isReady = value;
 }
 
-LongPollMgr::LongPollMgr(UserProfile *pUserProf, QNetworkAccessManager *pQNAM, QObject *parent):
+LongPollMgr::LongPollMgr(UserProfile *pUserProf, QNetworkAccessManager *pQNAM, DataBase *dataBase, QObject *parent):
     pQNAM(pQNAM),
     pUserProf(pUserProf),
+    dataBase(dataBase),
     QObject(parent)
 {
     isReady = false;
