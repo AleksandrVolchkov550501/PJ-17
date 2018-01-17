@@ -21,7 +21,6 @@ class ContactListModel: public QAbstractListModel
     DataBase *              dataBase;
     QNetworkReply *         pReply;
 
-
 protected:
     virtual QHash<int, QByteArray> roleNames() const;
 
@@ -43,8 +42,10 @@ public:
     virtual int rowCount(const QModelIndex &parent) const;
     virtual QVariant data(const QModelIndex &index, int role) const;
 
+    void clearContactList();
+
 public slots:
-    void updateListContactsFromDB();
+    bool updateListContactsFromDB();
     void add(Person *person);
     Person * getPerson(int id);
     void setFriendOnOff(QVariantList varList);

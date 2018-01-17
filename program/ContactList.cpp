@@ -4,6 +4,7 @@
 #include <QQmlContext>
 #include <QQuickItem>
 
+
 // ----------------------------------------------------------------------
 ContactList::ContactList(UserProfile * pUserProf, LongPollMgr *pLPM, DataBase *dataBase, QWidget* parent /*=0*/)
     : QWidget(parent)
@@ -11,30 +12,50 @@ ContactList::ContactList(UserProfile * pUserProf, LongPollMgr *pLPM, DataBase *d
     , pUserProf(pUserProf)
     , dataBase(dataBase)
 {
-    if(pLPM->getIsReady() == false)
-        connect(pLPM, SIGNAL(longPollMgrReady()), this, SLOT(startContactList()));
-    else
+//    if(pLPM->getIsReady() == false)
+//        connect(pLPM, SIGNAL(longPollMgrReady()), this, SLOT(startContactList()));
+//    else
         startContactList();
 }
 
 
 void ContactList::startContactList()
 {
-    disconnect(pLPM, SIGNAL(longPollMgrReady()), this, SLOT(startContactList()));
-    connect(pLPM, &LongPollMgr::longPollMgrReady, &LongPollMgr::startLongPoll);
+//    disconnect(pLPM, SIGNAL(longPollMgrReady()), this, SLOT(startContactList()));
+//    connect(pLPM, &LongPollMgr::longPollMgrReady, &LongPollMgr::startLongPoll);
 
     setWindowTitle("PJ-17");
     setWindowFlags(Qt::Tool | Qt::WindowStaysOnTopHint);
 
     QSettings qst(QApplication::organizationName(), QApplication::applicationName());
+
     QRect geom = qst.value("CLGeometry", QRect()).toRect();
     if(geom != QRect())
         setGeometry(geom);
     setContentsMargins(0, 0, 0, 0);
     QQuickWidget* pv = new QQuickWidget();  // NOTE: подумать над заменой на QQuickViw
 
+    pOnOffButton = new QPushButton("Не в сети");
+    pOnOffMenu   = new QMenu(pOnOffButton);
+
+    pOnAction  = new QAction("В сети");
+
+    connect(pOnAction, &QAction::triggered, this, &ContactList::slotOnAction);
+    pOffAction = new QAction("Не в сети");
+    pOffAction->setEnabled(false);
+    connect(pOffAction, &QAction::triggered, this, &ContactList::slotOffAction);
+    QAction* pactQuit = new QAction("&Quit", this);
+    connect(pactQuit, SIGNAL(triggered()), qApp, SLOT(quit()));
+
+    pOnOffMenu->addAction(pOnAction);
+    pOnOffMenu->addAction(pOffAction);
+    pOnOffMenu->addAction(pactQuit);
+
+    pOnOffButton->setMenu(pOnOffMenu);
+
     QVBoxLayout* pvbx = new QVBoxLayout();
     pvbx->addWidget(pv);
+    pvbx->addWidget(pOnOffButton);
     setLayout(pvbx);
 
     QQmlContext* pcon = pv->rootContext();
@@ -44,14 +65,11 @@ void ContactList::startContactList()
     pcon->setContextProperty("parentWidget", this);
     pv->setSource(QUrl("qrc:///contactList.qml"));
 
-    QAction* pactQuit = new QAction("&Quit", this);
-    connect(pactQuit, SIGNAL(triggered()), qApp, SLOT(quit()));
-
-    m_ptrayIconMenu = new QMenu(this);
-    m_ptrayIconMenu->addAction(pactQuit);
+//    m_ptrayIconMenu = new QMenu(this);
+//    m_ptrayIconMenu->addAction(pactQuit);
 
     m_ptrayIcon = new QSystemTrayIcon(this);
-    m_ptrayIcon->setContextMenu(m_ptrayIconMenu);
+    m_ptrayIcon->setContextMenu(pOnOffMenu);
     m_ptrayIcon->setToolTip(QApplication::applicationName());
 
     connect(m_ptrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
@@ -67,9 +85,27 @@ void ContactList::startContactList()
     m_ptrayIcon->show();
     show();
 
-    pLPM->startLongPoll();
+//    pLPM->startLongPoll();
 }
 
+void ContactList::slotOnAction()
+{
+    clmodel->updateListContactsFromDB();
+    connect(pLPM, &LongPollMgr::longPollMgrReady, &LongPollMgr::startLongPoll);
+    pLPM->startLongPoll();
+    pOnAction->setEnabled(false);
+    pOffAction->setEnabled(true);
+    pOnOffButton->setText("В сети");
+}
+
+void ContactList::slotOffAction()
+{
+    disconnect(pLPM, &LongPollMgr::longPollMgrReady, pLPM, &LongPollMgr::startLongPoll);
+    clmodel->clearContactList();
+    pOffAction->setEnabled(false);
+    pOnAction->setEnabled(true);
+    pOnOffButton->setText("Не в сети");
+}
 
 ContactList::~ContactList()
 {

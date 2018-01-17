@@ -3,7 +3,7 @@
 DataBase::DataBase(UserProfile * pUserProf)
     : pUserProf(pUserProf)
 {
-
+//    vkFriendsGet();
 }
 
 DataBase::~DataBase()
@@ -20,12 +20,12 @@ QList<Person *> DataBase::getListFriends()
         qDebug() << query.lastError().text();
         return QList<Person * >();
     }
-
-    if(!query.size())
-    {
-        vkFriendsGet();
-        return QList<Person * >();
-    }
+//    qDebug() << "query.size() = "<< query.size() << endl;
+//    if(query.size() <= 0)
+//    {
+//        vkFriendsGet();
+//        return QList<Person * >();
+//    }
 
     QList<Person *> listPersons;
     QSqlRecord record = query.record();

@@ -5,6 +5,7 @@
 #include <QQuickView>
 #include <QSystemTrayIcon>
 #include <QMenu>
+#include <QPushButton>
 #include "ContactListModel.h"
 #include "LongPollMgr.h"
 #include "Message.h"
@@ -17,7 +18,13 @@ class ContactList : public QWidget {
     Q_OBJECT
 private:
     QSystemTrayIcon *   m_ptrayIcon;
+
     QMenu *             m_ptrayIconMenu;
+    QPushButton *       pOnOffButton;
+    QMenu *             pOnOffMenu;
+    QAction *           pOnAction;
+    QAction *           pOffAction;
+
     ContactListModel *  clmodel;
     LongPollMgr *       pLPM;
     UserProfile *       pUserProf;
@@ -40,6 +47,8 @@ public slots:
     void slotShowDialog(int user_id);
     void slotNewMessage(QVariantList);
     void startContactList();
+    void slotOnAction();
+    void slotOffAction();
 
 };
 

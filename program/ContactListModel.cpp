@@ -12,7 +12,7 @@ ContactListModel::ContactListModel(UserProfile * pUserProf, LongPollMgr *pLPM, D
     connect(pLPM, &LongPollMgr::friendOnOff, this, &ContactListModel::setFriendOnOff);
     connect(dataBase, &DataBase::tableContactsChanged, this, &ContactListModel::updateListContactsFromDB);
 
-    updateListContactsFromDB();
+//    updateListContactsFromDB();
 }
 
 int ContactListModel::rowCount(const QModelIndex &parent) const
@@ -47,15 +47,26 @@ QVariant ContactListModel::data(const QModelIndex &index, int role) const
     }
 }
 
-void ContactListModel::updateListContactsFromDB()
+void ContactListModel::clearContactList()
 {
+    beginResetModel();
+        listIDs.clear();
+        contactList.clear();
+    endResetModel();
+}
+
+bool ContactListModel::updateListContactsFromDB()
+{
+    clearContactList();
     QList<Person *> listPersons = dataBase->getListFriends();
     if(!listPersons.empty())
     {
         foreach (Person * p, listPersons) {
             add(p);
         }
+        return true;
     }
+    return false;
 }
 
 QHash<int, QByteArray> ContactListModel::roleNames() const
