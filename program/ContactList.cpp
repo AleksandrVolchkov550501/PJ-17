@@ -15,6 +15,7 @@ ContactList::ContactList(UserProfile * pUserProf, LongPollMgr *pLPM, DataBase *d
 //    if(pLPM->getIsReady() == false)
 //        connect(pLPM, SIGNAL(longPollMgrReady()), this, SLOT(startContactList()));
 //    else
+        connect(PJ::pQNAM, &QNetworkAccessManager::networkAccessibleChanged, this, &ContactList::slotNetworkAccessibleChanged);
         startContactList();
 }
 
@@ -91,6 +92,7 @@ void ContactList::startContactList()
 void ContactList::slotOnAction()
 {
     clmodel->updateListContactsFromDB();
+    clmodel->vkGetOnlineFriends();
     connect(pLPM, &LongPollMgr::longPollMgrReady, &LongPollMgr::startLongPoll);
     pLPM->startLongPoll();
     pOnAction->setEnabled(false);
@@ -105,6 +107,12 @@ void ContactList::slotOffAction()
     pOffAction->setEnabled(false);
     pOnAction->setEnabled(true);
     pOnOffButton->setText("Не в сети");
+}
+
+void ContactList::slotNetworkAccessibleChanged(int a)
+{
+    if(a == 0)
+        slotOffAction();
 }
 
 ContactList::~ContactList()

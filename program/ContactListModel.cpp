@@ -146,3 +146,53 @@ void ContactListModel::savePhoto()
     }
 
 }
+
+void ContactListModel::vkGetOnlineFriends()
+{
+    QUrl url(VK::ApiUrl + "friends.get");
+    QUrlQuery query;
+    query.addQueryItem("access_token", pUserProf->getAccsesToken());
+    query.addQueryItem("v", VK::ApiVersion);
+    query.addQueryItem("order", "hints");
+    query.addQueryItem("count", "0");
+    query.addQueryItem("offset", "0");
+    query.addQueryItem("fields", "online");
+    url.setQuery(query);
+    qDebug() << "url = " << url << endl;
+
+    pReply = PJ::pQNAM->get(QNetworkRequest(url));
+    connect(pReply, &QNetworkReply::finished, this, &ContactListModel::vkHandleGetOnlineFriends);
+}
+
+void ContactListModel::vkHandleGetOnlineFriends()
+{
+    QJsonDocument document = QJsonDocument::fromJson(pReply->readAll());
+    pReply->deleteLater();
+    QJsonObject response = document.object().value("response").toObject();
+//    int count = response.value("count").toInt();
+    QJsonArray items = response.value("items").toArray();
+
+    qDebug() << "vkHandleGetOnlineFriends" << endl;
+//              << "document = " << document << endl
+//              << "response = " << response << endl
+//              << "count = " << count << endl
+//              << "items = " << items << endl;
+
+    foreach (QJsonValue jsv, items) {
+        QJsonObject joPerson = jsv.toObject();
+        if(joPerson.value("online").toInt())
+        {
+
+            int id = joPerson.value("id").toInt();
+            QString s = joPerson.value("last_name").toString();
+
+            qDebug() << s << endl;
+            if(contactList.contains(id))
+            {
+                contactList[id]->setOnline(1);
+                QModelIndex index = createIndex(contactList[id]->getPosInCL(), 0, static_cast<void *>(0));
+                emit dataChanged(index, index);
+            }
+        }
+    }
+}

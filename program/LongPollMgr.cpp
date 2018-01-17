@@ -37,7 +37,7 @@ LongPollMgr::LongPollMgr(UserProfile *pUserProf, QNetworkAccessManager *pQNAM, D
     QObject(parent)
 {
     isReady = false;
-//    connect(this, &LongPollMgr::longPollMgrReady, &LongPollMgr::startLongPoll);
+
     if(pUserProf->getIsReady() == false)
         connect(pUserProf, &UserProfile::ready, this, &LongPollMgr::getLongPollServer);
     else

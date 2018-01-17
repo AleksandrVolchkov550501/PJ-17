@@ -49,6 +49,7 @@ public slots:
     void startContactList();
     void slotOnAction();
     void slotOffAction();
+    void slotNetworkAccessibleChanged(int);
 
 };
 

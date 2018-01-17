@@ -49,6 +49,7 @@ public slots:
     void hrGetLongPollServer();
     void startLongPoll();
     void handleLPResponse();
+
 };
 
 #endif // LONGPOLLMGR_H

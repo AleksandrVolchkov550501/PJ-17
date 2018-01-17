@@ -8,16 +8,17 @@ Rectangle {
         anchors.fill: parent
         model: clmodel
         spacing: 5
-        highlight: Rectangle {
-                    color: "skyblue"
-                    opacity: 0.5
-                }
+//        highlight: Rectangle {
+//                    color: "skyblue"
+//                    opacity: 0.5
+//                }
         highlightFollowsCurrentItem: true
 
         delegate: Rectangle {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 height: 50
+                color: (model.online === 1) ? "#7FFFD4" : "#E0FFFF"
                 Image {
                     id: photo
                     width: 50
@@ -47,14 +48,14 @@ Rectangle {
                     maximumLineCount: 2
                 }
 
-                Image {
-                    id: online
-                    source: "images/online.png"
-                    width: parent.height / 2
-                    height: parent.height / 2
-                    anchors.right: parent.right
-                    visible: (model.online === 1) ? true : false
-                }
+//                Image {
+//                    id: online
+//                    source: "images/online.png"
+//                    width: parent.height / 2
+//                    height: parent.height / 2
+//                    anchors.right: parent.right
+//                    visible: (model.online === 1) ? true : false
+//                }
                 MouseArea {
                     anchors.fill: parent
                     onClicked: view.currentIndex = model.index

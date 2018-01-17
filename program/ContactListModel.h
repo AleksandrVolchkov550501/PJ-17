@@ -46,6 +46,8 @@ public:
 
 public slots:
     bool updateListContactsFromDB();
+    void vkGetOnlineFriends();
+    void vkHandleGetOnlineFriends();
     void add(Person *person);
     Person * getPerson(int id);
     void setFriendOnOff(QVariantList varList);
